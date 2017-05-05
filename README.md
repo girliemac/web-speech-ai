@@ -16,7 +16,5 @@ This is how this web app works:
 
 
 
-```
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/girliemac/web-speech-ai)
-```
 

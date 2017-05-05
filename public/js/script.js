@@ -37,7 +37,7 @@ recognition.addEventListener('speechend', () => {
 });
 
 recognition.addEventListener('error', (e) => {
-  output.textContent = 'Error: ' + e.error;
+  outputBot.textContent = 'Error: ' + e.error;
 });
 
 function synthVoice(text) {
