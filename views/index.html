@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="Simple AI Chat Bot Demo with Web Speech API">
+    <meta name="author" content="Tomomi Imura  @girlie_mac">
+
+    <title>Simple AI Demo with Web Speech API</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+
+  <body>
+    <section>
+      <h1>Simple AI Bot</h1>
+      <h2>with Web Speech API</h2>
+
+      <button><i class="fa fa-microphone"></i></button>
+
+      <div>
+          <p>You said: <em class="output-you">...</em></p>
+          <p>Bot replied: <em class="output-bot">...</em></p>
+      </div>
+    </section>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/script.js"></script>
+  </body>
+</html>
