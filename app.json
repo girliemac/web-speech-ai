@@ -10,7 +10,7 @@
     },
     "APIAI_SESSION_ID": {
       "description": "An arbitrary string",
-      "generator": "secret"
+      "value": ""
     }
   },
   "image": "heroku/nodejs"
