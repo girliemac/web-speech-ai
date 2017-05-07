@@ -42,7 +42,7 @@ recognition.addEventListener('error', (e) => {
 
 function synthVoice(text) {
   const synth = window.speechSynthesis;
-  let utterance = new SpeechSynthesisUtterance();
+  const utterance = new SpeechSynthesisUtterance();
   utterance.text = text;
   synth.speak(utterance);
 }
