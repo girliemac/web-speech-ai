@@ -11,7 +11,7 @@ View the demo on [Vimeo](https://vimeo.com/215612852/)
 This is how this web app works:
 
 1. Using the Web Speech API’s `SpeechRecognition` interface to listen your voice from a microphone
-2. Send your message to [API.ai](https://api.ai) (I'm just using their Small Talk) as a text string
+2. Send your message to [API.ai](https://api.ai) (the natural language processing platform) as a text string
 3. Once the AI from the API.ai returns the reply text back, use the `SpeechSynthesis` interface to give it a synthetic voice.
 
 
