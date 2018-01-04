@@ -19,14 +19,14 @@ This is how this web app works:
 
 ### Try It on Your Own Server
 
-Rename the `.env_test` to `.env` and fill the env vars:
+Rename the `.env.local` to `.env` and fill the env vars:
 
 ```
 APIAI_TOKEN=
-APIAI_SESSION_ID=
+APIAI_SESSION_ID=some_unique_session_id
 ```
 
-The first one is an API.ai API key (Please get one by sign up with [API.ai](https://api.ai)), and the second one is a session ID, which is an arbitrary string.
+The first one is an API.ai API key (Please get one by sign up with [API.ai](https://api.ai)), and the second one is a session ID, which is an arbitrary string (we could make this unique within the app, but that's beyond the scope of this demo).
 
 Or use this Heroku button to deploy to Heroku server. You just need to fill out the env vars with the API key and a session ID. No need to create an `.env` file.
 
