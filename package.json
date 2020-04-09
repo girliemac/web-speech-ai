@@ -4,7 +4,7 @@
   "description": "Simple AI Chat Bot Demo with Web Speech API",
   "main": "index.js",
   "scripts": {
-    "start": "nf start",
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Tomomi Imura",
