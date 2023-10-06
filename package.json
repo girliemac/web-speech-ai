@@ -1,19 +1,25 @@
 {
-  "name": "web-speech-ai",
+  "name": "ai-chatbot",
   "version": "1.0.0",
-  "description": "Simple AI Chat Bot Demo with Web Speech API",
+  "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon server.js"
   },
-  "author": "Tomomi Imura",
-  "license": "MIT",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "dependencies": {
-    "apiai": "^4.0.2",
-    "dotenv": "^4.0.0",
-    "ejs": "^2.5.6",
-    "express": "^4.15.2",
-    "socketio": "^1.0.0"
+    "@google-cloud/dialogflow": "^6.1.0",
+    "cors": "^2.8.5",
+    "dialogflow": "^4.0.3",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "morgan": "^1.10.0",
+    "socket.io": "^4.7.2",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
   }
 }

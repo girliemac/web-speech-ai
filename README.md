@@ -11,10 +11,11 @@ View the demo on [Vimeo](https://vimeo.com/215612852/)
 This is how this web app works:
 
 1. Using the Web Speech API’s `SpeechRecognition` interface to listen your voice from a microphone
-2. Send your message to [API.ai](https://api.ai) (the natural language processing platform) as a text string
-3. Once the AI from the API.ai returns the reply text back, use the `SpeechSynthesis` interface to give it a synthetic voice.
+2. Send your message to [Dialogflow][formerly known as api.ai](https://dialogflow) (the natural language processing platform) as a text string
+3. Once the AI from the Dialogflow returns the reply text back, use the `SpeechSynthesis` interface to give it a synthetic voice.
 
-
+### Setup
+First go to google cloud console create a project enable the project to access the dialogflow api in the api/services and the create you key (credentials) they will be automatically saved to your local system.Send the file to your workspace and enjoy.
 
 
 ### Try It on Your Own Server
@@ -22,13 +23,9 @@ This is how this web app works:
 Rename the `.env.local` to `.env` and fill the env vars:
 
 ```
-APIAI_TOKEN=
-APIAI_SESSION_ID=some_unique_session_id
+PROJECT_ID //the project Id of the project you gave access to the dialogflow api
 ```
-
-The first one is an API.ai API key (Please get one by sign up with [API.ai](https://api.ai)), and the second one is a session ID, which is an arbitrary string (we could make this unique within the app, but that's beyond the scope of this demo).
-
-Or use this Heroku button to deploy to Heroku server. You just need to fill out the env vars with the API key and a session ID. No need to create an `.env` file.
+.
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/girliemac/web-speech-ai)
 
