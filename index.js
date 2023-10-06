@@ -1,52 +1,85 @@
-'use strict';
-
-require('dotenv').config()
-const APIAI_TOKEN = process.env.APIAI_TOKEN;
-const APIAI_SESSION_ID = process.env.APIAI_SESSION_ID;
-
-const express = require('express');
+const express = require("express");
 const app = express();
+const morgan = require('morgan');
+const path = require('path');
+const { SessionsClient } = require('@google-cloud/dialogflow');
+const uuid = require('uuid');
+const http = require('http').createServer(app);
+const io = require('socket.io')(http);
+require('dotenv').config()
+app.use(morgan('dev'));
+const projectId = process.env.PROJECT_ID;
+const credentials = require('path/to/yout/credetials.json')
 
-app.use(express.static(__dirname + '/views')); // html
-app.use(express.static(__dirname + '/public')); // js, css, images
-
-const server = app.listen(process.env.PORT || 5000, () => {
-  console.log('Express server listening on port %d in %s mode', server.address().port, app.settings.env);
+const sessionClient = new SessionsClient({
+  projectId: projectId,
+  credentials: credentials
 });
+app.get('/credentials', (req, res) => {
+  res.send(credentials).status(200)
+})
+async function detectIntent(projectId, text) {
+  const sessionId = uuid.v4()
+  const sessionPath = sessionClient.projectAgentSessionPath(projectId, sessionId);
 
-const io = require('socket.io')(server);
-io.on('connection', function(socket){
-  console.log('a user connected');
-});
+  const request = {
+    session: sessionPath,
+    queryInput: {
+      text: {
+        text: text,
+        languageCode: 'en-US',
+      },
+    },
+  };
 
-const apiai = require('apiai')(APIAI_TOKEN);
+  try {
+    const responses = await sessionClient.detectIntent(request);
+    const result = responses[0].queryResult;
+    return result.fulfillmentText;
+  } catch (error) {
+    console.error('Error communicating with Dialogflow:', error.message);
+    return 'Sorry, there was an error.';
+  }
+}
+io.on('connection', function (socket) {
+  socket.on('chat message', async (text) => {
 
-// Web UI
-app.get('/', (req, res) => {
-  res.sendFile('index.html');
-});
-
-io.on('connection', function(socket) {
-  socket.on('chat message', (text) => {
-    console.log('Message: ' + text);
-
-    // Get a reply from API.ai
-
-    let apiaiReq = apiai.textRequest(text, {
-      sessionId: APIAI_SESSION_ID
-    });
-
-    apiaiReq.on('response', (response) => {
-      let aiText = response.result.fulfillment.speech;
-      console.log('Bot reply: ' + aiText);
+    try {
+      const aiText = await detectIntent(projectId, text);
       socket.emit('bot reply', aiText);
-    });
-
-    apiaiReq.on('error', (error) => {
+    } catch (error) {
       console.log(error);
-    });
-
-    apiaiReq.end();
-
+      socket.emit('bot reply', "I couldn't find a reply .");
+    }
   });
+});
+
+
+const PORT = process.env.PORT || 4000;
+
+// Serve static files
+app.use(express.static(path.join(__dirname, 'public'), {
+  setHeaders: (res, path) => {
+    if (path.endsWith('.css')) {
+      res.setHeader('Content-Type', 'text/css');
+    }
+    if (path.endsWith('.js')) {
+      res.setHeader('Content-Type', 'application/javascript');
+    }
+  }
+}));
+
+app.use(express.static(path.join(__dirname, 'views')));
+app.get('/test', (req, res) => {
+  console.log(process.env.PROJECT_ID);
+  res.status(200).json('check');
+});
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'index.html'));
+});
+
+// Call the detectIntent function when the server starts
+http.listen(PORT, () => {
+  console.log(`Server listening on localhost:${PORT}`);
 });
