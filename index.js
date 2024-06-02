@@ -1,8 +1,8 @@
 'use strict';
 
 require('dotenv').config()
-const APIAI_TOKEN = process.env.APIAI_TOKEN;
-const APIAI_SESSION_ID = process.env.APIAI_SESSION_ID;
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+const OPENAI_ENDPOINT = process.env.OPENAI_ENDPOINT; // URL of your Azure OpenAI endpoint
 
 const express = require('express');
 const app = express();
@@ -19,7 +19,7 @@ io.on('connection', function(socket){
   console.log('a user connected');
 });
 
-const apiai = require('apiai')(APIAI_TOKEN);
+const axios = require('axios'); // for making HTTP requests
 
 // Web UI
 app.get('/', (req, res) => {
@@ -27,26 +27,40 @@ app.get('/', (req, res) => {
 });
 
 io.on('connection', function(socket) {
-  socket.on('chat message', (text) => {
+  socket.on('chat message', async(text) => {
     console.log('Message: ' + text);
 
-    // Get a reply from API.ai
+const headers = {
+  "Content-Type": "application/json",
+  "api-key": OPENAI_API_KEY
 
-    let apiaiReq = apiai.textRequest(text, {
-      sessionId: APIAI_SESSION_ID
+};
+
+const data = {
+  "messages": [
+    {"role": "user", "content": text},
+    {"role": "user", "content": "STOP_HERE"}
+  ],
+  "max_tokens": 80,
+  "temperature": 0.7,
+  "frequency_penalty": 0,
+  "presence_penalty": 0,
+  "top_p": 0.95,
+  "stop": "STOP_HERE"
+};
+
+    await axios.post(OPENAI_ENDPOINT, data, { headers: headers })
+    .then(response => {
+      if (response.status === 200) { // Check for success
+        const generatedText = response.data.choices[0].message.content.trim();
+        console.log(generatedText);
+        socket.emit('bot reply', generatedText);
+      } else {
+        console.error(`Error: API call failed with status ${response.status}`);
+      }
+    })
+    .catch(error => {
+      console.error("An error occurred:", error);
     });
-
-    apiaiReq.on('response', (response) => {
-      let aiText = response.result.fulfillment.speech;
-      console.log('Bot reply: ' + aiText);
-      socket.emit('bot reply', aiText);
-    });
-
-    apiaiReq.on('error', (error) => {
-      console.log(error);
-    });
-
-    apiaiReq.end();
-
   });
 });
